@@ -1,0 +1,15 @@
+{
+  "name": "iagorivelo/sql-builder",
+  "autoload": {
+      "psr-4": {
+        "app\\": "app/"
+      }
+  },
+  "authors": [
+      {
+        "name": "Iago Augusto",
+        "email": "iago.rivelo@gmail.com"
+      }
+  ],
+  "require": {}
+}
