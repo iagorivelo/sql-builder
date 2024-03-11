@@ -32,7 +32,7 @@ class Select
   {
     $arrayWhere = (array) $where;
     
-    $this->where = implode(', ', $arrayWhere['where']);
+    $this->where = implode(' AND ', $arrayWhere['where']);
 
     return $this;
   }
@@ -64,7 +64,7 @@ class Select
 
     if ($this->where)
     {
-      $sqlString .= " WHERE {$this->where}";
+      $sqlString .= " WHERE {$this->where};";
     }
 
     return $sqlString;
