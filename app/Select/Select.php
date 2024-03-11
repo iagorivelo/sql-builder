@@ -2,71 +2,55 @@
 
 namespace app\Select;
 
+use app\Where\Where;
+
 class Select
 {
-  protected $table   = null;
-  protected $columns = null;
-  protected $where   = null;
+  protected $from;
+  protected $columns = [];
+  protected $where;
 
   public function __construct($table = null)
   {
-    if ($table)
+    if(isset($table) && !empty($table))
     {
-      $this->from($table);
+      $this->from = $table;
     }
   }
 
   public function from($table)
   {
-    $this->table = $table;
+    $this->from = $table;
+
+    return $this;
   }
 
-  public function columns($columns): Select
+  public function columns(array $columns)
   {
     $this->columns = $columns;
 
     return $this;
   }
 
-  public function where($where): Select
+  public function where(Where $where)
   {
-    $arrayWhere = (array) $where;
-    
-    $this->where = implode(' AND ', $arrayWhere['where']);
+    $this->where = $where;
 
     return $this;
   }
 
-  public function buildSqlString()
+  public function getFrom()
   {
-    if ($this->columns)
-    {
-      $cols = [];
+    return $this->from;
+  }
 
-      foreach($this->columns as $key => $value)
-      {
-        if(gettype($key) == 'string')
-        {
-          $cols[] = $value . ' AS ' . $key;
-        }
-        elseif(gettype($key) == 'integer')
-        {
-          $cols[] = $value;
-        }
-      }
+  public function getColumns()
+  {
+    return $this->columns;
+  }
 
-      $sqlString = "SELECT " . implode(', ', $cols) . " FROM {$this->table}";
-    }
-    else
-    {
-      $sqlString = "SELECT * FROM {$this->table}";
-    }
-
-    if ($this->where)
-    {
-      $sqlString .= " WHERE {$this->where};";
-    }
-
-    return $sqlString;
+  public function getWhere()
+  {
+    return $this->where;
   }
 }

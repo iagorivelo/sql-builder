@@ -4,37 +4,34 @@ namespace app\Where;
 
 class Where
 {
-  public $where = [];
+  protected $conditions = [];
 
-  public function equalTo(string $column, string $columnValue): Where
+  public function equalTo($column, $value)
   {
-    $this->where[] = "{$column} = '{$columnValue}'";
-
-    return $this;
+    $this->conditions[] = "$column = '$value'";
   }
 
-  public function notEqualTo(string $column, string $columnValue): Where
+  public function notEqualTo($column, $value)
   {
-    $this->where[] = "{$column} != '{$columnValue}'";
-
-    return $this;
+    $this->conditions[] = "$column != '$value'";
   }
 
-  public function in(string $column, array $columnValue): Where
+  public function in($column, array $values)
   {
-    $formatArray = implode(', ', $columnValue);
+    $valuesStr = implode("', '", $values);
 
-    $this->where[] = "{$column} IN ('{$formatArray}')";
-
-    return $this;
+    $this->conditions[] = "$column IN ('$valuesStr')";
   }
 
-  public function notIn(string $column, array $columnValue): Where
+  public function notIn($column, array $values)
   {
-    $formatArray = implode(', ', $columnValue);
-    
-    $this->where[] = "{$column} NOT IN ('{$formatArray}')";
+    $valuesStr = implode("', '", $values);
 
-    return $this;
+    $this->conditions[] = "$column NOT IN ('$valuesStr')";
+  }
+
+  public function getConditions()
+  {
+    return implode(' AND ', $this->conditions);
   }
 }
