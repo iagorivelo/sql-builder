@@ -22,9 +22,23 @@ class Sql
   {
     $query = "SELECT ";
 
+    $cols = [];
+
+    foreach($select->getColumns() as $key => $value)
+    {
+      if(gettype($key) == 'string')
+      {
+        $cols[] = $value . ' AS ' . $key;
+      }
+      elseif(gettype($key) == 'integer')
+      {
+        $cols[] = $value;
+      }
+    }
+
     if($select->getColumns())
     {
-      $query .= implode(', ', $select->getColumns());
+      $query .= implode(', ', $cols);
     }
     else
     {
@@ -41,6 +55,29 @@ class Sql
     $this->query = $query;
 
     return $this;
+  }
+
+  public function buildQuery($select)
+  {
+    $query = "SELECT ";
+
+    if($select->getColumns())
+    {
+      $query .= implode(', ', $select->getColumns());
+    }
+    else
+    {
+      $query .= '*';
+    }
+
+    $query .= " FROM {$select->getFrom()}";
+
+    if($select->getWhere())
+    {
+      $query .= " WHERE {$select->getWhere()->getConditions()}";
+    }
+
+    return $query;
   }
 
   public function execute()

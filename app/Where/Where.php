@@ -30,6 +30,11 @@ class Where
     $this->conditions[] = "$column NOT IN ('$valuesStr')";
   }
 
+  public function literal($query)
+  {
+    $this->conditions[] = $query;
+  }
+
   public function getConditions()
   {
     return implode(' AND ', $this->conditions);
